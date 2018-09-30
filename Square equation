@@ -3,13 +3,7 @@
 #include <assert.h>
 #include <math.h>
 
-/*! This function solves square equation.
- * \param [in] a - coefficient before x * x.
- * \param [in] b - coefficient before x.
- * \param [in] c - constant of square equation.
- * \param [in] root1 - pointer that point on block of memory where first root has to locate.
- * \param [in] root2 - pointer that point on block of memory where second root has to locate.
- */
+
 int Solve_square(double a, double b, double c, double *root1, double *root2);
 
 int Solve_linear(double b, double c, double *root1);
@@ -64,7 +58,7 @@ int Solve_square(double a, double b, double c, double *root1, double *root2)
 
     if (a == 0)
     {
-        return (Solve_linear(a, b, root1));
+        return (Solve_linear(b, c, root1));
     }
 
     double D = NAN;
@@ -103,7 +97,7 @@ int Solve_linear(double b, double c, double *root1)
     }
     else if (b != 0)
     {
-        *root1 = -c / b;
+        *root1 = -(c / b);
         return 1;
     }
     else 
