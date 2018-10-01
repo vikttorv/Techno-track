@@ -1,87 +1,100 @@
+//Square Eq Slv v.1.0 Viktor
+
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
 #include <math.h>
 
+const int FAILURE_OF_SQUARE = -1;
+const int FAILURE_OF_LINEAR = -2;
+const int NO_ROOTS = 0;
+const int ONE_ROOT = 1;
+const int TWO_ROOTS = 2;
+const int INFINITE_NUMBER_OF_ROOTS = 3;
 
-int Solve_square(double a, double b, double c, double *root1, double *root2);
-
+int Solve_square(double a, double b, double c, double *root1, double *root2, double *D);
 int Solve_linear(double b, double c, double *root1);
+
 int main( )
 {
     using namespace std;
-	printf("Square Eq Slv v.1.0 Viktor\n");
 	printf("Enter a, b, c:\n");
-    double a = NAN, b = NAN, c = NAN;
+    double a = NAN, b = NAN, c = NAN, D = NAN;
     int code_scanf = 0xBEDA;
-    code_scanf = scanf("%lg %lg %lg", &a, &b, &c);
-    while (code_scanf != 3)
+    do
     {
-        char rubbish;
-        while ((rubbish = getchar( )) != '\n');
-        printf("You enter incorrect coefficients. Try to enter they again.\n");
+        if (code_scanf != 0xBEDA)
+        {
+            char rubbish;
+            while ((rubbish = getchar( )) != '\n');
+            printf("You enter incorrect coefficients. Try to enter they again.\n");
+        }
         code_scanf = scanf("%lg %lg %lg", &a, &b, &c);
-    } 
-
+    }
+    while (code_scanf != 3);
 
     double root1 = NAN, root2 = NAN;
-    int num_roots = Solve_square(a, b, c, &root1, &root2);
+    int num_roots = Solve_square(a, b, c, &root1, &root2, &D);
     switch(num_roots)
     {
-        case 0:
+        case NO_ROOTS:
             printf("Square equation hasn't roots.\n");
             break;
-        case 1: 
+        case ONE_ROOT: 
             printf("Square equation has 1 root: %lg.\n", root1);
             break;
-        case 2:
-            printf("Square equation has 2 roots: root1 = %lg; root2 = %lg\n.", root1, root2);
+        case TWO_ROOTS:
+            printf("Square equation has 2 roots: root1 = %lg; root2 = %lg.\n", root1, root2);
             break;
-        case 3:
+        case INFINITE_NUMBER_OF_ROOTS:
             printf("Each number from the set of real numbers is the solution.\n");
             break;
+        case FAILURE_OF_SQUARE:
+             printf("Strange D = %lg in Solve_square( ), where a = %lg, b = %lg, c = %lg.\n", D, a, b, c);
+             break;
+        case FAILURE_OF_LINEAR:
+             printf("Strange b = %lg in Solve_linear.\n", b);
+             break;
         default:
-            printf("Strange num_root = %d in Solve_square(%lg, %lg, %lg, %p, %p)\n", num_roots, a, b, c, &root1, &root2);
-            return 1;
+            printf("Strange num_root = %d in Solve_square(%lg, %lg, %lg, %p, %p).\n", num_roots, a, b, c, &root1, &root2);
+            return EXIT_FAILURE;
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 
-int Solve_square(double a, double b, double c, double *root1, double *root2)
+int Solve_square(double a, double b, double c, double *root1, double *root2, double *D)
 {
     assert(isfinite(a));
     assert(isfinite(b));
     assert(isfinite(b));
     assert(root1 != nullptr);
     assert(root2 != nullptr);
-
+    assert(D != nullptr);
     if (a == 0)
     {
         return (Solve_linear(b, c, root1));
     }
 
-    double D = NAN;
-    D = b * b - 4 * a * c;
-    if (D < 0)
+    *D = b * b - 4 * a * c;
+    if (*D < 0)
     {
-        return 0;
+        return NO_ROOTS;
     }
-    else if (D == 0)
+    else if (*D == 0)
     {
         *root1 = -b / (2 * a);
-        return 1;   
+        return ONE_ROOT;   
     }
-    else if (D > 0)
+    else if (*D > 0)
     {
-        *root1 = (-b + sqrt(D)) / (2 * a);
-        *root2 = (-b - sqrt(D)) / (2 * a);
-        return 2;
+        *root1 = (-b + sqrt(*D)) / (2 * a);
+        *root2 = (-b - sqrt(*D)) / (2 * a);
+        return TWO_ROOTS;
     }
     else 
     {
-        printf("Strange D = %lg in Solve_square( ), where a = %lg, b = %lg, c = %lg\n", D, a, b, c);
-        return 999;
+        return FAILURE_OF_SQUARE;
     }
 }
 
@@ -98,12 +111,10 @@ int Solve_linear(double b, double c, double *root1)
     else if (b != 0)
     {
         *root1 = -(c / b);
-        return 1;
+        return ONE_ROOT;
     }
     else 
     {
-        printf("Strange b = %lg in Solve_linear\n", b);;
-        return 999;
+        return FAILURE_OF_LINEAR;
     }
 }
-
