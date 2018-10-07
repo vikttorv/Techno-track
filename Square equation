@@ -61,8 +61,17 @@ int main( )
     }
     return EXIT_SUCCESS;
 }
-
-
+/**
+    \param[in] a - Coefficient before "x * x".
+    \param[in] b - Coefficient before "x".
+    \param[in] c - Constant of square equation.
+    \param[out] root1 - Pointer on first root's block of memory.
+    \param[out] root2 - Pointer on second root's block of memory.
+    \param[out] D - Pointer on discriminant's block of memory.
+    \return Number of roots.
+    \throw FAILURE_OF_SQUARE - Strange discriminant.
+    \throw FAILURE_OF_LINEAR - Strange b.
+ */
 int Solve_square(double a, double b, double c, double *root1, double *root2, double *D)
 {
     assert(isfinite(a));
@@ -98,7 +107,13 @@ int Solve_square(double a, double b, double c, double *root1, double *root2, dou
     }
 }
 
-
+/**
+    \param[in] b - Coefficient before "x". 
+    \param[in] c - Constant of linear equation.
+    \param[out] root1 - Pointer on first root's block of memory.
+    \return Number of roots/
+    \throw FAILURE_OF_LINEAR - Strange b.
+ */
 int Solve_linear(double b, double c, double *root1)
 {
     assert(isfinite(b));
@@ -106,7 +121,7 @@ int Solve_linear(double b, double c, double *root1)
     assert(root1 != nullptr);
     if (b == 0)
     {
-        return ((c == 0) * 3);
+        return ((c == 0) ? 3 : 0);
     }
     else if (b != 0)
     {
