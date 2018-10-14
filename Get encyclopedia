@@ -65,13 +65,11 @@ int print_str(char* table_permutation[ ], int num_strings, bool backward = false
 
 
 /**
-    \param[in] table_permutation - Array with pointers on strings in str.
-    \param[in] left - The first element of array to sort.
-    \param[in] right - The last element of array to sort.
-    \return Returns code of error
-    \throw SUCCESS - Program ended rightly.
+    \param[in] arg1 - Pointer on first string for compare.
+    \param[in] arg2 - Pointer on second string for compare.
+    \return status of comparing two strings.
  */
-int quick_sort(char* table_permutation[ ], int left, int right);
+int compare(const char** arg1, const char** arg2);
 
 
 int main(int argc, char *argv[])
@@ -141,16 +139,8 @@ int main(int argc, char *argv[])
                 return EXIT_FAILURE;
         }
    
-
-        int code_quick_sort = quick_sort(table_permutation, 0, num_strings - 1);
-        switch (code_quick_sort)
-        {
-            case SUCCESS:
-                break;
-            default:
-                printf("Strange code_Quick_sort = %d\n", code_quick_sort);
-                return EXIT_FAILURE;
-        }
+        int (*ptr_compare)(const char** , const char**) = &compare;
+        qsort(table_permutation, num_strings, sizeof(char*), (int (*)(const void *, const void *))ptr_compare);
 
 
         printf("\n\n\n");
@@ -314,34 +304,7 @@ int print_str(char* table_permutation[ ], int num_strings, bool backward)
 }
 
 
-int quick_sort(char* table_permutation[ ], int left, int right)
+int compare(const char** arg1, const char** arg2)
 {
-    int i = left, j = right;
-    char* pivot = table_permutation[(left + right) / 2];
-    do 
-    {
-        while (strcmp(table_permutation[i], pivot) < 0)
-        {
-            i++;
-        }
-        while (strcmp(table_permutation[j], pivot) > 0)
-        {
-            j--;
-        }
-        if (i <= j)
-        {
-            char* tmp = table_permutation[i];
-            table_permutation[i] = table_permutation[j];
-            table_permutation[j] = tmp;
-            i++; j--;
-        }
-    }
-    while (i <= j);
-
-
-    if (j > left) 
-        quick_sort(table_permutation, left, j);
-    if (right > i) 
-        quick_sort(table_permutation, i, right);
-    return SUCCESS;
+    return strcmp(*arg1, *arg2);
 }
