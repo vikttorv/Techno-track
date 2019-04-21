@@ -12,7 +12,8 @@ namespace my_lib
     typedef long long VECTOR_SIZE;
     
     template <typename Type>
-    const Type CANARY_VAL;
+    const Type CANARY_VAL = {};
+
     const int NEW_STR = 10;
     enum errors
     {
@@ -30,7 +31,7 @@ namespace my_lib
             VECTOR_SIZE capacity_;
         public:
             Vector(void);
-            explicit Vector(VECTOR_SIZE cap);
+            explicit Vector(const VECTOR_SIZE cap);
             ~Vector(void);
             Vector(const Vector<Type> & vect);
             bool ok(void) const;
@@ -41,14 +42,14 @@ namespace my_lib
                 \param[in] ind - Ind to get element from it. 
                 \return Element that lie on this index.
             */
-            Type at(VECTOR_SIZE ind) const;
+            Type at(const VECTOR_SIZE ind) const;
 
             /**
                 \brief Get element from ind position. You can change element. Check bounds.
                 \param[in] ind - Ind to get or change element from it. 
                 \return Link on element that lie on this index.
             */
-           Type & operator[](VECTOR_SIZE ind);
+           Type & operator[](const VECTOR_SIZE ind);
 
             /**
                 \brief To get the first element. 
@@ -210,3 +211,4 @@ namespace my_lib
 #include "vector_func.cpp"
 #include "bool_vector.cpp"
 #include "proxy_bool.cpp"
+
