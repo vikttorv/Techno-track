@@ -27,7 +27,7 @@ namespace my_lib
     }
 
     template <typename Type>
-    Vector<Type>::Vector(VECTOR_SIZE size)
+    Vector<Type>::Vector(const VECTOR_SIZE size)
     {
     	if (size < 0)
     	{
@@ -140,7 +140,7 @@ namespace my_lib
     }
 
     template <typename Type>
-    Type Vector<Type>::at(VECTOR_SIZE ind) const
+    Type Vector<Type>::at(const VECTOR_SIZE ind) const
     {
         CHECK
         assert(ind < size_ && ind >= 0);
@@ -148,7 +148,7 @@ namespace my_lib
     }
 
     template <typename Type>
-    Type & Vector<Type>::operator[](VECTOR_SIZE ind)
+    Type & Vector<Type>::operator[](const VECTOR_SIZE ind)
     {
         CHECK
         assert(ind < size_ && ind >= 0);
@@ -276,3 +276,4 @@ namespace my_lib
     }
 
 }
+
